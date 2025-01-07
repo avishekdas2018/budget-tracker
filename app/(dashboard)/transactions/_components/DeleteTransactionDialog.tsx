@@ -37,7 +37,7 @@ const DeleteTransactionDialog = ({ transactionId, open, setOpen }: DeleteTransac
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>This action cannot be undone. This will permanently delete your category.</AlertDialogDescription>
+          <AlertDialogDescription>This action cannot be undone. This will permanently delete your transaction.</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
