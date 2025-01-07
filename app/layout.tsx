@@ -1,17 +1,32 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
+import { ClerkProvider, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { dark } from "@clerk/themes";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+import { DM_Sans } from 'next/font/google';
+import { Toaster } from "@/components/ui/sonner";
+import { Loader2 } from "lucide-react";
+
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
 });
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+
+// const inter = Inter({
+//   subsets: ["latin"],
+// });
+
+// const ptSans = PT_Sans({
+//   subsets: ["latin"],
+//   weight: "400",
+// });
+
+// const alata = Alata({
+//   subsets: ["latin"],
+//   weight: "400",
+//   style: "normal"
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,13 +38,26 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider appearance={{ baseTheme: dark,  }}>
+      <html lang="en" className="dark" style={{ colorScheme: "dark" }} suppressHydrationWarning>
+        <body
+          className={`${dmSans.className} antialiased`}
+        >
+          <Toaster richColors position="bottom-right" />
+          <ClerkLoading>
+            <div className="flex h-screen w-screen items-center justify-center">
+              <Loader2 className="h-14 w-14 animate-spin text-violet-500" />
+            </div>
+          </ClerkLoading>
+          <ClerkLoaded>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+              {children}
+            </ThemeProvider>
+          </ClerkLoaded>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
