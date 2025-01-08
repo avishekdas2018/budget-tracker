@@ -47,20 +47,8 @@ export function CurrencyBox() {
 
   const userSettings = useQuery<UserSettings>({
     queryKey: ["userSettings"],
-    queryFn: async () => {
-      try {
-        const response = await fetch("/api/user-settings")
-        if (!response.ok) {
-          throw new Error(`Failed to fetch user settings" ${response.status}`)
-        }
-        const data = await response.json()
-        return data
-        
-      } catch (error) {
-        throw new Error(`Failed to fetch user settings: ${error}`)
-      }
-    },
-
+    queryFn: () => fetch("/api/user-settings").then((res) => res.json())
+    ,
   })
 
 
