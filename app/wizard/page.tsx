@@ -4,17 +4,16 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs'
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { currentUser } from '@clerk/nextjs/server'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 const WizardPage = async () => {
-  const { userId } = await auth()
-  const isAuth = !!userId
+
   const user = await currentUser()
 
-  if (!isAuth) {
+  if (!user) {
     redirect('/sign-in')
   }
 
@@ -29,7 +28,7 @@ const WizardPage = async () => {
         <div className='container max-w-2xl flex flex-col items-center justify-between gap-4'>
           <div>
             <h1 className='text-center text-3xl'>
-              Welcome, <span className='ml-2 font-bold'>{user?.firstName}!👋</span>
+              Welcome, <span className='ml-2 font-bold'>{user.firstName}!👋</span>
             </h1>
             <h2 className='mt-4 text-base text-center text-muted-foreground'>
               Let &apos;s get started by setting up your currency
