@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client"
 import { cn } from '@/lib/utils'
 import React, { useCallback } from 'react'
 import CountUp from 'react-countup'
 
 
+
 interface CustomTooltipProps {
-  formatter: Intl.NumberFormat,
-  active: boolean,
-  payload: { payload: { income: number, expense: number } }[],
+  formatter: any,
+  active?: boolean | undefined,
+  payload?: any,
 }
 const CustomTooltip = ({ formatter, active, payload }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) {

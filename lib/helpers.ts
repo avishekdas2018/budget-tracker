@@ -42,6 +42,7 @@ export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
 }
 
 
+
 export const GetFormatterForCurrency = (currency: string) => {
   const locale = Currencies.find(c => c.value === currency)?.locale
 
