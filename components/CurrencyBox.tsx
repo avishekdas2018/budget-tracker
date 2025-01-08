@@ -48,10 +48,19 @@ export function CurrencyBox() {
   const userSettings = useQuery<UserSettings>({
     queryKey: ["userSettings"],
     queryFn: async () => {
-      const response = await fetch("/api/user-settings")
-      const data = await response.json()
-      return data
+      try {
+        const response = await fetch("/api/user-settings")
+        if (!response.ok) {
+          throw new Error(`Failed to fetch user settings" ${response.status}`)
+        }
+        const data = await response.json()
+        return data
+        
+      } catch (error) {
+        throw new Error(`Failed to fetch user settings: ${error}`)
+      }
     },
+
   })
 
 
@@ -78,14 +87,16 @@ export function CurrencyBox() {
         id: "update-currency",
       })
 
-      setSelectedOption(
-        Currencies.find((currency) => currency.value === data.currency) || null
-      )
+      if (data) {
+        setSelectedOption(
+          Currencies.find((currency) => currency.value === data.currency) || null
+        )
+      }
     },
     onError: (e) => {
       toast.error("Something went wrong", {
         id: "update-currency",
-        description: e.message,
+        description: e?.message || "Please try again later",
       })
     }
   })
