@@ -1,12 +1,13 @@
 "use client";
 
 import SkeletonWrapper from "@/components/SkeletonWrapper";
-import { dateToUTCDate, GetBalanceStatsResponseType, GetFormatterForCurrency } from "@/lib/helpers";
+import { GetBalanceStatsResponseType, GetFormatterForCurrency } from "@/lib/helpers";
 import { UserSettings } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { TrendingDown, TrendingUp, Wallet } from "lucide-react";
 import { useMemo } from "react";
 import StatCard from "./StatCard";
+import { endOfDay, startOfDay } from "date-fns";
 
 
 interface StatsCardsProps {
@@ -17,7 +18,13 @@ interface StatsCardsProps {
 const StatsCards = ({ userSettings, from, to }: StatsCardsProps) => {
   const statsQuery = useQuery<GetBalanceStatsResponseType>({
     queryKey: ["overview", "stats", from, to],
-    queryFn: () => fetch(`/api/stats/balance?from=${dateToUTCDate(from)}&to=${dateToUTCDate(to)}`).then(res => res.json()),
+    queryFn: async () => {
+      const fromDate = startOfDay(from)
+      const toDate = endOfDay(to)
+
+
+      return fetch(`/api/stats/balance?from=${fromDate.toISOString()}&to=${toDate.toISOString()}`).then((res) => res.json())
+    }
   })
 
   const formatter = useMemo(() => {

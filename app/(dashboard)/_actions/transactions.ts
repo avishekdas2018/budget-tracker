@@ -35,7 +35,7 @@ export const CreateTransaction = async (form: CreateTransactionSchemaType) => {
       data: {
         userId: user.id,
         amount,
-        date,
+        date:date,
         description: description || "",
         type,
         category: categoryRow.name,

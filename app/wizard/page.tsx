@@ -4,15 +4,19 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { ClerkLoaded, ClerkLoading } from '@clerk/nextjs'
-import { currentUser } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
 const WizardPage = async () => {
-
+  const { userId } = await auth()
+  const isAuth = !!userId
   const user = await currentUser()
 
+  if (!isAuth) {
+    redirect('/sign-in')
+  }
   if (!user) {
     redirect('/sign-in')
   }

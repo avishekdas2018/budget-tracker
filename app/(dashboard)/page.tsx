@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button'
 import prisma from '@/lib/prisma'
-import { auth, currentUser } from '@clerk/nextjs/server'
+import { currentUser } from '@clerk/nextjs/server'
 import { redirect } from 'next/navigation'
 import CreateTransactionDialog from './_components/CreateTransactionDialog'
 import Overview from './_components/Overview'
@@ -8,17 +8,17 @@ import HistorySection from './_components/HistorySection'
 import { CardFooter } from '@/components/ui/card'
 
 const DashboardPage = async () => {
-  const { userId } = await auth()
-  const isAuth = !!userId
+  // const { userId } = await auth()
+  // const isAuth = !!userId
   const user = await currentUser()
 
-  if (!isAuth) {
+  if (!user) {
     redirect('/sign-in')
   }
 
   const userSetting = await prisma.userSettings.findUnique({
     where: {
-      userId: user?.id,
+      userId: user.id,
     }
   })
 
@@ -33,7 +33,7 @@ const DashboardPage = async () => {
       <div className='border-b bg-card'>
         <div className='flex flex-wrap items-center justify-between gap-6 py-8 px-10'>
           <p className='text-3xl font-bold'>
-            Hello, {user?.firstName}! 👋
+            Hello, {user.firstName}! 👋
           </p>
           <div className='flex items-center gap-3'>
             <CreateTransactionDialog trigger={

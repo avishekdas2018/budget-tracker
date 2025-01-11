@@ -1,11 +1,12 @@
 "use client";
 
 import SkeletonWrapper from '@/components/SkeletonWrapper';
-import { dateToUTCDate, GetCategoriesStatsResponseType, GetFormatterForCurrency } from '@/lib/helpers';
+import { GetCategoriesStatsResponseType, GetFormatterForCurrency } from '@/lib/helpers';
 import { UserSettings } from '@prisma/client'
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import CategoryCard from './CategoryCard';
+import { endOfDay, startOfDay } from 'date-fns';
 
 
 
@@ -17,7 +18,12 @@ interface CategoryStatsProps {
 const CategoryStats = ({ userSettings, from, to }: CategoryStatsProps) => {
   const statsQuery = useQuery<GetCategoriesStatsResponseType>({
     queryKey: ["overview", "stats", "categories", from, to],
-    queryFn: () => fetch(`/api/stats/categories?from=${dateToUTCDate(from)}&to=${dateToUTCDate(to)}`).then(res => res.json()),
+    queryFn: async () => {
+      const fromDate = startOfDay(from)
+      const toDate = endOfDay(to)
+
+      return fetch(`/api/stats/categories?from=${fromDate.toISOString()}&to=${toDate.toISOString()}`).then(res => res.json())
+    } 
   })
 
 

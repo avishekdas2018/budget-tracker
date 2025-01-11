@@ -40,8 +40,6 @@ const CreateTransactionDialog = (
     defaultValues: {
       type,
       date: new Date(),
-      description: "",
-      amount: 0,
     }
   })
 
@@ -121,7 +119,7 @@ const CreateTransactionDialog = (
               <FormItem>
                 <FormLabel>Amount</FormLabel>
                 <FormControl>
-                  <Input type="number" {...field} />
+                  <Input defaultValue={0} type="number" {...field} />
                 </FormControl>
                 <FormDescription>Transaction Amount (Required)</FormDescription>
               </FormItem>

@@ -2,18 +2,20 @@ import { GetFormatterForCurrency } from "@/lib/helpers";
 import prisma from "@/lib/prisma";
 import { OverviewQuerySchema } from "@/schema/overview-schema";
 import { currentUser } from "@clerk/nextjs/server";
+import { endOfDay, startOfDay } from "date-fns";
 import { redirect } from "next/navigation";
 
 export async function GET(request: Request) {
-  const user= await currentUser();
+
+  const user = await currentUser();
 
   if (!user) {
     redirect("/sign-in"); 
   }
 
   const { searchParams } = new URL(request.url);
-  const from = searchParams.get("from");
-  const to = searchParams.get("to");
+  const from = new Date(searchParams.get('from') || '');
+  const to = new Date(searchParams.get('to') || '');
 
   const queryParams = OverviewQuerySchema.safeParse({
     from,
@@ -37,6 +39,7 @@ export async function GET(request: Request) {
 
 
 export type GetTransactionHistoryResponseType = Awaited<ReturnType<typeof getTransactionHistory>>;
+
 const getTransactionHistory = async (
   userId: string,
   from: Date,
@@ -58,8 +61,8 @@ const getTransactionHistory = async (
     where: {
       userId,
       date: {
-        gte: from,
-        lte: to,
+        gte: startOfDay(from),
+        lte: endOfDay(to),
       },
     },
     orderBy: {

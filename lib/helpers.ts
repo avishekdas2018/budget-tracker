@@ -1,4 +1,4 @@
-import { getDaysInMonth } from "date-fns"
+import { endOfDay, getDaysInMonth, startOfDay } from "date-fns"
 import { Currencies } from "./currencies"
 import prisma from "./prisma"
 import { Period, Timeframe } from "./types"
@@ -21,15 +21,16 @@ export const dateToUTCDate = (date: Date) => {
 export type GetBalanceStatsResponseType = Awaited<ReturnType<typeof getBalanceStats>>
 
 export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
+  
   const totals = await prisma.transaction.groupBy({
     by: ["type"],
     where: {
       userId: userId,
       date: {
-        gte: from,
-        lte: to
+        gte: startOfDay(from),
+        lte: endOfDay(to)
       }
-    },
+    }, 
     _sum: {
       amount: true
     }
@@ -46,7 +47,6 @@ export const getBalanceStats = async (userId: string, from: Date, to: Date) => {
 export const GetFormatterForCurrency = (currency: string) => {
   const locale = Currencies.find(c => c.value === currency)?.locale
 
-
   return new Intl.NumberFormat(locale, {
     style: "currency",
     currency: currency
@@ -62,8 +62,8 @@ export const getCategoriesStats = async (userId: string, from: Date, to: Date) =
     where: {
       userId: userId,
       date:{
-        gte: from,
-        lte: to
+        gte: startOfDay(from),
+        lte: endOfDay(to)
       }
     },
     _sum: {

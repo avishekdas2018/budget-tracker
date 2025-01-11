@@ -7,9 +7,9 @@ import CountUp from 'react-countup'
 
 
 interface CustomTooltipProps {
-  formatter: any,
+  formatter: Intl.NumberFormat,
   active?: boolean | undefined,
-  payload?: any,
+  payload?: { payload: { income: number, expense: number } }[],
 }
 const CustomTooltip = ({ formatter, active, payload }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) {
@@ -20,7 +20,7 @@ const CustomTooltip = ({ formatter, active, payload }: CustomTooltipProps) => {
   const {income, expense} = data
 
   return (
-    <div className='min-w-[300px] rounded border bg-background p-4'>
+    <div className='lg:min-w-[300px] w-[200px] rounded border bg-background p-4'>
       <TooltipRow formatter={formatter} label="Expense" value={expense} bgColor="bg-rose-500" textColor="text-rose-500" />
       <TooltipRow formatter={formatter} label="Income" value={income} bgColor="bg-emerald-500" textColor="text-emerald-500" />
       <TooltipRow formatter={formatter} label="Balance" value={income - expense} bgColor="bg-gray-100" textColor="text-foreground" />

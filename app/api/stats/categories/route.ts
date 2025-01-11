@@ -12,8 +12,8 @@ export async function GET(request: Request) {
 
   const { searchParams } = new URL(request.url)
 
-  const from = searchParams.get("from")
-  const to = searchParams.get("to")
+  const from = new Date(searchParams.get('from') || '');
+  const to = new Date(searchParams.get('to') || '');
 
   const queryParams = OverviewQuerySchema.safeParse({from, to})
 

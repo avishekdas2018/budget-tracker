@@ -8,7 +8,7 @@ import { DataTableFacetedFilter } from '@/components/datatable/FacedDataFilter'
 import SkeletonWrapper from '@/components/SkeletonWrapper'
 import { Button } from '@/components/ui/button'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { dateToUTCDate } from '@/lib/helpers'
+//import { dateToUTCDate } from '@/lib/helpers'
 import { cn } from '@/lib/utils'
 import { useQuery } from '@tanstack/react-query'
 import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, SortingState, useReactTable } from "@tanstack/react-table"
@@ -17,6 +17,7 @@ import { download, generateCsv, mkConfig } from 'export-to-csv';
 import { Download, MoreHorizontal, Trash2 } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import DeleteTransactionDialog from './DeleteTransactionDialog'
+import { endOfDay, startOfDay } from 'date-fns'
 
 
 interface TransactionTableProps {
@@ -124,7 +125,12 @@ const TransactionTable = ({ from, to }: TransactionTableProps) => {
 
   const historyQuery = useQuery<GetTransactionHistoryResponseType>({
     queryKey: ["transactions", "history", from, to],
-    queryFn: () => fetch(`/api/transaction-history?from=${dateToUTCDate(from)}&to=${dateToUTCDate(to)}`).then((res) => res.json())
+    queryFn: async () => {
+      const fromDate = startOfDay(from)
+      const toDate = endOfDay(to)
+
+      return fetch(`/api/transaction-history?from=${fromDate.toISOString()}&to=${toDate.toISOString()}`).then((res) => res.json())
+    }
   })
 
   const handleExportCSV = (data: any[]) => {

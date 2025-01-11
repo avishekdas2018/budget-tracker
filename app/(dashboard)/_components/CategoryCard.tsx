@@ -40,8 +40,6 @@ const CategoryCard = ({ type, data, formatter }: CategoryCardProps) => {
               {filteredData.map((item) => {
                 const amount = item._sum.amount || 0
                 const percentage = (amount * 100) / (total || amount)
-
-
                 return (
                   <div className='flex flex-col gap-2' key={item.category}>
                     <div className='flex items-center justify-between'>

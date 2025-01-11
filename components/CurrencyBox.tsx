@@ -47,7 +47,7 @@ export function CurrencyBox() {
 
   const userSettings = useQuery<UserSettings>({
     queryKey: ["userSettings"],
-    queryFn: () => fetch("/api/user-settings").then((res) => res.json())
+    queryFn: async () => fetch("/api/user-settings").then((res) => res.json())
     ,
   })
 
