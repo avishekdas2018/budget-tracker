@@ -7,9 +7,9 @@ import CountUp from 'react-countup'
 
 
 interface CustomTooltipProps {
-  formatter: Intl.NumberFormat,
+  formatter: any,
   active?: boolean | undefined,
-  payload?: { payload: { income: number, expense: number } }[],
+  payload?: any,
 }
 const CustomTooltip = ({ formatter, active, payload }: CustomTooltipProps) => {
   if (!active || !payload || payload.length === 0) {
